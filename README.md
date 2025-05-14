@@ -1,0 +1,3 @@
+# A New *New Chart of History*
+
+At the end of the 18th century, British polymath Joseph Priestley created a *[Chart of Biography](https://en.wikipedia.org/wiki/A_Chart_of_Biography)* and a *[New Chart of History](https://en.wikipedia.org/wiki/A_New_Chart_of_History)*. This is an attempt to recreate the latter as an online data visualisation, with a broader scope and a less Anglo-centric perspective.

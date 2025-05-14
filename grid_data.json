@@ -1,0 +1,263 @@
+{
+    "rows": ["Mongolia", "Kazakhstan", "Khwarazm", "Transoxia", "Khorasan", "Southern Persia", "Northern Persia", "Mesopotamia", "Levant", "Egypt", "Eastern Anatolia", "Southern Anatolia", "Northern Anatolia", "Western Anatolia", "Constantinople", "Greece", "Albania", "Croatia", "Austria", "Royal Hungary", "Transylvania", "Greater Hungary", "Bulgaria", "Moldavia", "Royal Prussia", "Pomerania", "Poland", "Silesia", "Bohemia", "Lithuania", "Ruthenia", "Eastern Ukraine", "Smolensk", "Moscow", "Tver", "Novgorod", "Kalmykia", "Siberia", "Yakutia", "Kamchatka", "Chukotka", "Newfoundland", "Nova Scotia", "New Brunswick", "Quebec", "Ontario", "Ruptert's Land", "Northwest Territory", "Vancouver", "British Columbia", "Hawaii", "Alaska", "Washington", "Idaho", "Oregon", "Virginia", "Massachusetts", "New Hampshire", "Maryland", "Connecticut", "Rhode Island", "Delaware", "North Carolina", "South Carolina", "New York", "New Jersey", "Pennsylvania", "Georgia", "Arkansas", "Missouri", "Iowa", "Louisiana", "Kansas", "Oklahoma", "Nebraska", "Minnesota", "Montana", "Wyoming", "Colorado", "North Dakota", "South Dakota", "Florida", "Texas", "New Mexico", "California", "Nevada", "Utah", "Arizona", "Nueva Vizcaya", "Nuevo Leon", "Nueva Galicia", "Mexico", "Oaxaca", "Tabasco", "Yucatan", "Guatemala", "El Salvador", "Honduras", "Nicaragua", "Costa Rica", "Cuba"],
+    "areas": {
+        "Thirteen Colonies": ["Virginia", "Massachusetts", "New Hampshire", "Maryland", "Connecticut", "Rhode Island", "Delaware", "North Carolina", "South Carolina", "New York", "New Jersey", "Pennsylvania", "Georgia"],
+        "Louisiana Territory": ["Arkansas", "Missouri", "Iowa", "Louisiana", "Kansas", "Oklahoma", "Nebraska", "Minnesota", "Montana", "Wyoming", "Colorado", "North Dakota", "South Dakota"],
+        "Oregon Territory": ["Washington", "Idaho", "Oregon"],
+        "Mexican Cession": ["California", "Nevada", "Utah", "Arizona", "New Mexico"],
+        "Modern Mexico": ["Nueva Vizcaya", "Nuevo Leon", "Nueva Galicia", "Mexico", "Oaxaca", "Yucatan", "Tabasco"],
+        "Central America": ["Guatemala", "El Salvador", "Honduras", "Nicaragua", "Costa Rica"],
+        "Dominion of Canada": ["Newfoundland", "Nova Scotia", "New Brunswick", "Quebec", "Ontario"],
+        "Modern Canada": ["Nova Scotia", "New Brunswick", "Quebec", "Ontario", "Rupert's Land", "Northwest Territories", "British Columbia"],
+        "Tsardom of Russia": ["Moscow", "Tver", "Novgorod", "Kalmykia", "Siberia", "Yakutia", "Kamchatka"],
+        "Modern Russia": ["Tsardom of Russia", "Chukotka"],
+        "Kingdom of Poland": ["Pomerania", "Poland", "Silesia", "Bohemia", "Royal Prussia"],
+        "Kingdom of Prussia": ["Silesia", "Royal Prussia", "Pomerania", "Poland"],
+        "Ukraine": ["Ruthenia", "Eastern Ukraine"],
+        "Persia": ["Northern Persia", "Southern Persia"]
+    },
+    "contexts": {
+        "British America": [
+            ["Virginia", 1607, 1776],
+            ["Massachusetts", 1620, 1776],
+            ["New Hampshire", 1623, 1776],
+            ["Maryland", 1632, 1776],
+            ["Connecticut", 1636, 1776],
+            ["Rhode Island", 1636, 1776],
+            ["Delaware", 1638, 1776],
+            ["North Carolina", 1653, 1776],
+            ["South Carolina", 1663, 1776],
+            ["New York", 1664, 1776],
+            ["New Jersey", 1664, 1776],
+            ["Pennsylvania", 1681, 1776],
+            ["Georgia", 1732, 1776],
+            ["Newfoundland", 1610, 1907],
+            ["Nova Scotia", 1621, 1667],
+            ["Nova Scotia", 1710, 1848],
+            ["New Brunswick", 1763, 1867],
+            ["Quebec", 1763, 1867],
+            ["Ontario", 1782, 1867],
+            ["Ruptert's Land", 1670, 1870],
+            ["Northwest Territory", 1763, 1870],
+            ["Vancouver", 1849, 1871],
+            ["British Columbia", 1858, 1871]
+        ],
+        "Nova Scotia": [
+            ["Nova Scotia", 1848, 1867]
+        ],
+        "Canada": [
+            ["Dominion of Canada", 1867, null],
+            ["Ruptert's Land", 1870, null],
+            ["Northwest Territory", 1870, null],
+            ["Vancouver", 1871, null],
+            ["British Columbia", 1871, null],
+            ["Newfoundland", 1907, null]
+        ],
+        "USA": [
+            ["Thirteen Colonies", 1776, null],
+            ["Louisiana Territory", 1803, null],
+            ["Florida", 1819, null],
+            ["Texas", 1846, null],
+            ["Oregon Territory", 1846, null],
+            ["Mexican Cession", 1848, null],
+            ["Alaska", 1867, null],
+            ["Hawaii", 1898, null],
+            ["Cuba", 1898, 1902]
+        ],
+        "Republic of Texas": [
+            ["Texas", 1836, 1846]
+        ],
+        "Olmec Civilisation": [
+            ["Tabasco", -1200, 400]
+        ],
+        "Aztec Triple Alliance": [
+            ["Mexico", 1428, 1521],
+            ["Oaxaca", 1502, 1521]
+        ],
+        "New Spain": [
+            ["Louisiana Territory", 1763, 1800],
+            ["California", 1769, 1821],
+            ["Nevada", 1776, 1821],
+            ["Utah", 1776, 1821],
+            ["Arizona", 1692, 1821],
+            ["New Mexico", 1598, 1821],
+            ["Texas", 1519, 1836],
+            ["Florida", 1513, 1819],
+            ["Nueva Vizcaya", 1562, 1821],
+            ["Nuevo Leon", 1596, 1821],
+            ["Nueva Galicia", 1531, 1821],
+            ["Mexico", 1521, 1821],
+            ["Oaxaca", 1521, 1821],
+            ["Tabasco", 1543, 1821],
+            ["Yucatan", 1543, 1821],
+            ["Central America", 1524, 1821],
+            ["Cuba", 1492, 1898]
+        ],
+        "New France": [
+            ["New Brunswick", 1605, 1763],
+            ["Nova Scotia", 1605, 1621],
+            ["Nova Scotia", 1667, 1710],
+            ["New Brunswick", 1604, 1763],
+            ["Quebec", 1608, 1763],
+            ["Ontario", 1747, 1782],
+            ["Louisiana Territory", 1800, 1803]
+        ],
+        "Mexico": [
+            ["Mexican Cession", 1821, 1848],
+            ["Texas", 1821, 1845],
+            ["Modern Mexico", 1821, null],
+            ["Guatemala", 1821, 1823],
+            ["El Salvador", 1821, 1823],
+            ["Honduras", 1821, 1823],
+            ["Nicaragua", 1821, 1823],
+            ["Costa Rica", 1821, 1823]
+        ],
+        "Federal Republic of Central America": [
+            ["Central America", 1823, 1838]
+        ],
+        "Guatemala": [
+            ["Guatemala", 1838, null]
+        ],
+        "El Salvador": [
+            ["El Salvador", 1838, null]
+        ],
+        "Honduras": [
+            ["Honduras", 1838, null]
+        ],
+        "Nicaragua": [
+            ["Nicaragua", 1838, null]
+        ],
+        "Costa Rica": [
+            ["Costa Rica", 1838, null]
+        ],
+        "Cuba": [
+            ["Cuba", 1902, null]
+        ],
+        "Kingdom of Hawaii": [
+            ["Hawaii", 1795, 1893]
+        ],
+        "Republic of Hawaii": [
+            ["Hawaii", 1893, 1898]
+        ],
+        "Grand Duchy of Moscow": [
+            ["Moscow", 1261, 1547],
+            ["Smolensk", 1514, 1547]
+        ],
+        "Tsardom of Russia": [
+            ["Moscow", 1547, 1721],
+            ["Novgorod", 1478, 1721],
+            ["Tver", 1485, 1721],
+            ["Smolensk", 1547, 1611],
+            ["Smolensk", 1656, 1721],
+            ["Kalmykia", 1630, 1721],
+            ["Siberia", 1598, 1721],
+            ["Yakutia", 1628, 1721],
+            ["Kamchatka", 1698, 1721]
+        ],
+        "Russian Empire": [
+            ["Tsardom of Russia", 1721, 1917],
+            ["Chukotka", 1778, 1917],
+            ["Alaska", 1784, 1867],
+            ["Moldavia", 1793, 1917],
+            ["Smolensk", 1721, 1917],
+            ["Eastern Ukraine", 1775, 1917]
+        ],
+        "Kingdom of Lithuania": [
+            ["Lithuania", 1263, 1569],
+            ["Ruthenia", 1320, 1349],
+            ["Smolensk", 1404, 1514]
+        ],
+        "Kingdom of Poland": [
+            ["Poland", 1025, 1569],
+            ["Ruthenia", 1349, 1569],
+            ["Moldavia", 1387, 1569],
+            ["Pomerania", 1385, 1569],
+            ["Silesia", 1471, 1526],
+            ["Bohemia", 1471, 1526]
+        ],
+        "Royal Prussia": [
+            ["Royal Prussia", 1466, 1569]
+        ],
+        "Polish-Lithuanian Commonwealth": [
+            ["Kingdom of Poland", 1569, 1795],
+            ["Lithuania", 1569, 1795],
+            ["Ruthenia", 1569, 1649],
+            ["Smolensk", 1611, 1656],
+            ["Royal Prussia", 1569, 1772]
+        ],
+        "Kingdom of Galicia-Volhynia": [
+            ["Ukraine", 1199, 1246]
+        ],
+        "Cossack Hetmanate": [
+            ["Ukraine", 1649, 1764]
+        ],
+        "Kingdom of Prussia": [
+            ["Silesia", 1742, 1871],
+            ["Royal Prussia", 1772, 1871],
+            ["Pomerania", 1772, 1871],
+            ["Poland", 1795, 1871]
+        ],
+        "German Empire": [
+            ["Kingdom of Prussia", 1871, 1918]
+        ],
+        "Kingdom of Hungary": [
+            ["Royal Hungary", 1000, 1526],
+            ["Greater Hungary", 1000, 1526],
+            ["Transylvania", 1002, 1526],
+            ["Croatia", 1102, 1526]
+        ],
+        "Principality of Transylvania": [
+            ["Transylvania", 1570, 1711]
+        ],
+        "Second Bulgarian Empire": [
+            ["Bulgaria", 1185, 1395]
+        ],
+        "Habsburg Empire": [
+            ["Austria", 1282, 1918],
+            ["Bohemia", 1526, 1918],
+            ["Silesia", 1526, 1742],
+            ["Croatia", 1526, 1918],
+            ["Royal Hungary", 1526, 1918],
+            ["Transylvania", 1711, 1918],
+            ["Ruthenia", 1772, 1918]
+        ],
+        "Ottoman Empire": [
+            ["Northern Anatolia", 1299, 1918],
+            ["Western Anatolia", 1302, 1918],
+            ["Bulgaria", 1395, 1918],
+            ["Constantinople", 1453, 1918],
+            ["Southern Anatolia", 1481, 1918],
+            ["Greece", 1481, 1918],
+            ["Albania", 1481, 1918],
+            ["Levant", 1516, 1918],
+            ["Egypt", 1517, 1918],
+            ["Mesopotamia", 1535, 1918],
+            ["Eastern Anatolia", 1566, 1918],
+            ["Transylvania", 1526, 1711],
+            ["Greater Hungary", 1526, 1918]
+        ],
+        "Safavid Empire": [
+            ["Northern Persia", 1501, 1736],
+            ["Southern Persia", 1504, 1736],
+            ["Mesopotamia", 1509, 1566],
+            ["Khorasan", 1510, 1736],
+            ["Eastern Anatolia", 1511, 1566]
+        ],
+        "Mongol Empire": [
+            ["Mongolia", 1209, 1294],
+            ["Transoxia", 1223, 1294],
+            ["Khorasan", 1227, 1294],
+            ["Khwarazm", 1227, 1294],
+            ["Kazakhstan", 1227, 1294],
+            ["Persia", 1259, 1294],
+            ["Mesopotamia", 1279, 1294],
+            ["Eastern Anatolia", 1259, 1294],
+            ["Southern Anatolia", 1279, 1294],
+            ["Ukraine", 1279, 1294]
+        ],
+        "Mamluk Sultanate": [
+            ["Egypt", 1250, 1517],
+            ["Levant", 1291, 1517]
+        ]
+    }
+}
