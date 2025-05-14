@@ -78,18 +78,18 @@ def rows_to_points(context_subset):
     for k,row in enumerate(context_subset):
         if k==0:
             # First row gets a top line
-            point_list.append((row[0],row[1]))
-            point_list.append((row[0],row[2]))
+            point_list.append((row[0],row[1])[::-1])
+            point_list.append((row[0],row[2])[::-1])
         if k==len(context_subset)-1:
             # Last row gets a bottom line
-            point_list.append((row[0]+1,row[1]))
-            point_list.append((row[0]+1,row[2]))
+            point_list.append((row[0]+1,row[1])[::-1])
+            point_list.append((row[0]+1,row[2])[::-1])
         if k!=0 and row[1] != context_subset[k-1][1]:
-            point_list.append((row[0], row[1]))
-            point_list.append((row[0], context_subset[k-1][1]))
+            point_list.append((row[0], row[1])[::-1])
+            point_list.append((row[0], context_subset[k-1][1])[::-1])
         if k!=0 and row[2] != context_subset[k-1][2]:
-            point_list.append((row[0], row[2]))
-            point_list.append((row[0], context_subset[k-1][2]))
+            point_list.append((row[0], row[2])[::-1])
+            point_list.append((row[0], context_subset[k-1][2])[::-1])
     return point_list
 
 polygon_points = []

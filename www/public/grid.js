@@ -15,51 +15,41 @@ fetch('./grid_contents.json')
 	var colourmap = chart_data.colours;
 	var row_names = chart_data.row_names;
 	var gridpoints = chart_data.gridpoints;
+	var polydata = chart_data.polydata;
 	console.log(colourmap)
 
-	function gridData() {
-		var gridarray = new Array();
-		var xpos = 1; //starting xpos and ypos at 1 so the stroke will show when we make the grid below
-		var ypos = 1;
-		var width = row_width;
-		var height = row_height;
-		var click = 0;
-		
-		// iterate for rows	
-		for (var row = 0; row < num_rows; row++) {
-			gridarray.push( new Array() );
-			
-			// iterate for cells/columns inside rows
-			for (var column = 0; column < num_cols; column++) {
-				gridarray[row].push({
-					x: xpos,
-					y: ypos,
-					row: row,
-					col: column,
-					width: width,
-					height: height,
-					click: click,
-					label: gridtext[row][column],
-					row_name: row_names[row],
-					top: borders[row][column][0],
-					right: borders[row][column][1],
-					bottom: borders[row][column][2],
-					left: borders[row][column][3],
-				})
-				// increment the x position, i.e. move it over by $width
-				xpos += width;
+	function sortAxisAlignedPolygon(points) {
+		const path = [points[0]]
+		const remaining = points.slice(1)
+		console.log(points)
+		console.log(points.slice(1))
+		let useX = true
+		while (path.length < points.length) {
+			const current_point = path[path.length-1]
+			const candidates = remaining.filter(p => useX ? p[0]==current_point[0] : p[1]==current_point[1])
+			if (candidates.length == 0) {
+				throw new Error(`No remaining point shares ${useX ? 'x' : 'y'} with current point.`);
 			}
-			// reset the x position after a row is complete
-			xpos = 1;
-			// increment the y position for the next row, i.e. move it down $height
-			ypos += height;	
+			
+			 // Pick the one with minimal distance along the varying axis
+			let next_point = candidates.reduce((closest, p) => {
+				const [x0,y0] = current_point;
+				const closestDist = useX ? Math.abs(closest[0] - x0) : Math.abs(closest[1] - y0);
+				const currentDist = useX ? Math.abs(p[0] - x0) : Math.abs(p[1] - y0);
+				return currentDist < closestDist ? p : closest;
+			});
+			path.push(next_point);
+
+			// Remove chosen point from remaining
+			const idx = remaining.findIndex(p => p[0] == next_point[0] && p[1] == next_point[1]);
+			remaining.splice(idx, 1);
+
+			useX = !useX;
 		}
-		return gridarray;
+		console.log(path)
+		return path;
 	}
 
-	var gridData = gridData();
-	console.log(gridData);
-	console.log(gridpoints);
 	var grid_width = row_width*num_cols + "px";
 	var grid_height = row_height*num_rows + "px";
 	console.log("Width: " + grid_width);
@@ -70,63 +60,24 @@ fetch('./grid_contents.json')
 		.append("svg")
 		.attr("width",grid_width)
 		.attr("height",grid_height);
-		
-	var row = grid.selectAll(".row")
-		.data(gridData)
-		.enter().append("g")
-		.attr("class", "row");
-		
-	var column = row.selectAll(".square")
-		.data(function(d) { return d; })
-		.enter().append("rect")
-		.attr("class","square")
-		.attr("x", function(d) { return d.x; })
-		.attr("y", function(d) { return d.y; })
-		.attr("width", function(d) { return d.width; })
-		.attr("height", function(d) { return d.height; })
-		.style("fill", function(d) { return colourmap[d.label]; })
-		.attr("fill-opacity", function(d) { return d.label==null ? 0.2 : 1.0; })
-		// .style("stroke", "#222");
 
-	var row_label = row.selectAll(".row_label")
-		.data(function (d) { return d; })
-		.enter().append("text")
-		.attr("class", "row_label")
-		.attr("x", row_width / 2)
-		.attr("y", function(d) { return d.y + d.height / 2; })
-		// .attr("fill", "black")
-		.style("font-size", "8px")
-		.text(function(d) { return d.col==0 ? d.row_name : null; });
-
-
-	var top_border = row.selectAll(".top_border")
-		.data(function (d) { return d; })
-		.enter().append("line")
-		.attr("class", "top_border")
-		.attr("x1", function(d) {return d.x})
-		.attr("y1", function(d) {return d.y})
-		.attr("x2", function(d) {return d.x+d.width})
-		.attr("y2", function(d) {return d.y})
-		.style("stroke", "#222")
-		.style("stroke-width", function(d) {return d.top ? 1 : 0});
-
-	var right_border = row.selectAll(".right_border")
-		.data(function (d) { return d; })
-		.enter().append("line")
-		.attr("class", "right_border")
-		.attr("x1", function(d) {return d.x+d.width})
-		.attr("y1", function(d) {return d.y})
-		.attr("x2", function(d) {return d.x+d.width})
-		.attr("y2", function(d) {return d.y+d.height})
-		.style("stroke", "#222")
-		.style("stroke-width", function(d) {return d.right ? 1 : 0});
+	var poly = grid.selectAll(".poly")
+		.data(polydata)
+		.enter().append("polygon")
+		.attr("class", ".poly")
+		.attr("points", function(d) {
+			const sorted = sortAxisAlignedPolygon(d.points);
+			return sorted.map(p => [p[0]*row_width, p[1]*row_height].join(",")).join(" ");})
+		.style("fill", function(d) { return colourmap[d.name]; })
+		.attr("stroke", "black")
+    	.attr("stroke-width", 1);
 
 	var point = grid.selectAll(".point")
 		.data(gridpoints)
 		.enter().append("circle")
 		.attr("class","point")
-		.attr("cx", d => 1+d[1]*row_width)
-		.attr("cy", d => 1+d[0]*row_height)
+		.attr("cx", d => 1+d[0]*row_width)
+		.attr("cy", d => 1+d[1]*row_height)
 		.attr("r", 2.5)
 		.style("fill", "black")
 
@@ -134,36 +85,14 @@ fetch('./grid_contents.json')
 		.data(gridpoints)
 		.enter().append("text")
 		.attr("class", "pointlabel")
-		.attr("x", d => 1+d[1]*row_width)
-		.attr("y", d => 1+d[0]*row_height)
+		.attr("x", d => 1+d[0]*row_width)
+		.attr("y", d => 1+d[1]*row_height)
 		.attr("dx", 1) // horizontal offset
 		.attr("dy", -1) // vertical offset (move up)
 		.text(d => `(${d[0]}, ${d[1]+1200})`)
 		.attr("font-size", "8px")
 		.attr("fill", "#333")
 		.attr("text-anchor", "start");
-
-	// var bottom_border = row.selectAll(".top_border")
-	// 	.data(function (d) { return d; })  // Bind data only if the border should be present
-	// 	.enter().append("line")
-	// 	.attr("class", "top_border")
-	// 	.attr("x1", function(d) {return d.x})
-	// 	.attr("y1", function(d) {return d.y})
-	// 	.attr("x2", function(d) {return d.x+d.width})
-	// 	.attr("y2", function(d) {return d.y})
-	// 	.style("stroke", "#222")
-	// 	.style("stroke-width", function(d) {return d.top ? 1 : 0});
-
-	// var left_border = row.selectAll(".top_border")
-	// 	.data(function (d) { return d; })  // Bind data only if the border should be present
-	// 	.enter().append("line")
-	// 	.attr("class", "top_border")
-	// 	.attr("x1", function(d) {return d.x})
-	// 	.attr("y1", function(d) {return d.y})
-	// 	.attr("x2", function(d) {return d.x+d.width})
-	// 	.attr("y2", function(d) {return d.y})
-	// 	.style("stroke", "#222")
-	// 	.style("stroke-width", function(d) {return d.top ? 1 : 0});
 
 	})
 	.catch(error => {

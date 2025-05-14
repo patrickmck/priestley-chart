@@ -122,7 +122,8 @@ output_dict = {
     'borders': border_array,
     'colours': colour_map,
     'row_names': list(row_names.keys()),
-    'gridpoints': gridpoints
+    'gridpoints': gridpoints,
+    'polydata': gridpoint_data
 }
 
 np.savetxt('grid_contents.csv', M, delimiter=',', fmt='%s')
