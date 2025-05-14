@@ -1,7 +1,7 @@
 import json
 import numpy as np
 
-with open('graph.json', 'r') as f:
+with open('grid_data.json', 'r') as f:
     graphdata = json.load(f)
 
 def expand_node(area_name):
@@ -107,6 +107,13 @@ colour_map = {
 }
 colour_map.update({None: '#f1e2b3'})
 
+with open('www/public/grid_points.json', 'r') as f:
+    gridpoint_data = json.load(f)
+
+gridpoints = []
+for g in gridpoint_data:
+    gridpoints.extend(g['points'])
+print(gridpoints)
 
 output_dict = {
     'num_rows': num_rows,
@@ -114,7 +121,8 @@ output_dict = {
     'data': context_array,
     'borders': border_array,
     'colours': colour_map,
-    'row_names': list(row_names.keys())
+    'row_names': list(row_names.keys()),
+    'gridpoints': gridpoints
 }
 
 np.savetxt('grid_contents.csv', M, delimiter=',', fmt='%s')

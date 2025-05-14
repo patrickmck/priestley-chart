@@ -1,9 +1,9 @@
 // const chart_data = require('../output.json')
 
 const row_width = 2
-const row_height = 10
+const row_height = 20
 
-fetch('./output.json')
+fetch('./grid_contents.json')
   .then(response => response.json())
   .then(chart_data => {
     // console.log(chart_data);
@@ -14,6 +14,7 @@ fetch('./output.json')
 	var num_cols = chart_data.num_cols;
 	var colourmap = chart_data.colours;
 	var row_names = chart_data.row_names;
+	var gridpoints = chart_data.gridpoints;
 	console.log(colourmap)
 
 	function gridData() {
@@ -45,12 +46,12 @@ fetch('./output.json')
 					bottom: borders[row][column][2],
 					left: borders[row][column][3],
 				})
-				// increment the x position. I.e. move it over by 50 (width variable)
+				// increment the x position, i.e. move it over by $width
 				xpos += width;
 			}
 			// reset the x position after a row is complete
 			xpos = 1;
-			// increment the y position for the next row. Move it down 50 (height variable)
+			// increment the y position for the next row, i.e. move it down $height
 			ypos += height;	
 		}
 		return gridarray;
@@ -58,7 +59,7 @@ fetch('./output.json')
 
 	var gridData = gridData();
 	console.log(gridData);
-
+	console.log(gridpoints);
 	var grid_width = row_width*num_cols + "px";
 	var grid_height = row_height*num_rows + "px";
 	console.log("Width: " + grid_width);
@@ -119,7 +120,29 @@ fetch('./output.json')
 		.attr("y2", function(d) {return d.y+d.height})
 		.style("stroke", "#222")
 		.style("stroke-width", function(d) {return d.right ? 1 : 0});
-	
+
+	var point = grid.selectAll(".point")
+		.data(gridpoints)
+		.enter().append("circle")
+		.attr("class","point")
+		.attr("cx", d => 1+d[1]*row_width)
+		.attr("cy", d => 1+d[0]*row_height)
+		.attr("r", 2.5)
+		.style("fill", "black")
+
+	var pointlabel = grid.selectAll(".pointlabel")
+		.data(gridpoints)
+		.enter().append("text")
+		.attr("class", "pointlabel")
+		.attr("x", d => 1+d[1]*row_width)
+		.attr("y", d => 1+d[0]*row_height)
+		.attr("dx", 1) // horizontal offset
+		.attr("dy", -1) // vertical offset (move up)
+		.text(d => `(${d[0]}, ${d[1]+1200})`)
+		.attr("font-size", "8px")
+		.attr("fill", "#333")
+		.attr("text-anchor", "start");
+
 	// var bottom_border = row.selectAll(".top_border")
 	// 	.data(function (d) { return d; })  // Bind data only if the border should be present
 	// 	.enter().append("line")

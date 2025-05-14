@@ -206,9 +206,6 @@
             ["Transylvania", 1002, 1526],
             ["Croatia", 1102, 1526]
         ],
-        "Principality of Transylvania": [
-            ["Transylvania", 1570, 1711]
-        ],
         "Second Bulgarian Empire": [
             ["Bulgaria", 1185, 1395]
         ],
@@ -231,7 +228,8 @@
             ["Albania", 1481, 1918],
             ["Levant", 1516, 1918],
             ["Egypt", 1517, 1918],
-            ["Mesopotamia", 1535, 1918],
+            ["Mesopotamia", 1535, 1623],
+            ["Mesopotamia", 1628, 1918],
             ["Eastern Anatolia", 1566, 1918],
             ["Transylvania", 1526, 1711],
             ["Greater Hungary", 1526, 1918]
@@ -239,7 +237,8 @@
         "Safavid Empire": [
             ["Northern Persia", 1501, 1736],
             ["Southern Persia", 1504, 1736],
-            ["Mesopotamia", 1509, 1566],
+            ["Mesopotamia", 1508, 1535],
+            ["Mesopotamia", 1623, 1628],
             ["Khorasan", 1510, 1736],
             ["Eastern Anatolia", 1511, 1566]
         ],
