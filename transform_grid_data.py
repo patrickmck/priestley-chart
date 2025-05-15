@@ -121,7 +121,8 @@ output_dict = {
     'data': context_array,
     'borders': border_array,
     'colours': colour_map,
-    'row_names': list(row_names.keys()),
+    'row_names': row_names,
+    'row_numbers': {k: r for k,r in enumerate(graphdata['rows'])},
     'gridpoints': gridpoints,
     'polydata': gridpoint_data
 }

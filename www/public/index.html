@@ -10,7 +10,7 @@
   <link rel="icon" href="logo.png">
   <link rel="apple-touch-icon" href="logo.png">
 
-  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
 
   <style>
     .app-container {
@@ -19,21 +19,24 @@
         margin-right: 50px;
         padding: 0px;
     }
-    .dropdown {
-      min-width: 600px;
-    }
     .svg-container {
         text-align: center;
         padding: 5px;
-        /* height: 550px; */
+        background-color: #FCF8F0;
     }
     body {
       font-family: sans-serif;
     }
-    .input-example {
-      color: blue;
-      text-decoration: underline;
-      cursor: pointer;
+    .tooltip {
+      position: absolute;
+      /* background-color: blue; */
+      border: 1px solid gray;
+      padding: 4px 8px;
+      pointer-events: none;
+      font-family: sans-serif;
+      font-size: 12px;
+      /* visibility: hidden; */
+      /* z-index: 10; */
     }
   </style>
 
@@ -42,6 +45,7 @@
 <body class='app-container'>
 
   <div id='grid' class='svg-container'></div>
+  <!-- <div id='hovertext' class='tooltip'></div> -->
   <script src='grid.js'></script>
   
 </body>
