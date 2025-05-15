@@ -2,8 +2,8 @@
 const row_width = 2
 const row_height = 20
 
-const opacity_low = 0.6
-const opacity_high = 0.8
+const opacity_low = 0.5
+const opacity_high = 0.9
 
 fetch('./grid_contents.json')
   .then(response => response.json())
@@ -14,6 +14,8 @@ fetch('./grid_contents.json')
 	// var borders = chart_data.borders;
 	var num_rows = chart_data.num_rows;
 	var num_cols = chart_data.num_cols;
+	var start_year = chart_data.start_year;
+	var end_year = chart_data.end_year;
 	var colourmap = chart_data.colours;
 	// var row_names = chart_data.row_names;
 	var row_numbers = chart_data.row_numbers;
@@ -95,7 +97,7 @@ fetch('./grid_contents.json')
 
 	// Function to generate tooltip html content, given a node selection
 	let make_node_tooltip_content = (node, event) => {
-		let this_year = 1200+Math.round(event.pageX/row_width);
+		let this_year = start_year+Math.round(event.pageX/row_width);
 		let this_row = Math.floor(event.pageY/row_height);
 		let output_html = `<b>${node.__data__.name}</b><br/>\
 		(${this_year}, ${row_numbers[this_row]})`
@@ -135,7 +137,7 @@ fetch('./grid_contents.json')
 	// 	.attr("y", d => 1+d[1]*row_height)
 	// 	.attr("dx", 1) // horizontal offset
 	// 	.attr("dy", -1) // vertical offset (move up)
-	// 	.text(d => `(${d[0]}, ${d[1]+1200})`)
+	// 	.text(d => `(${d[0]}, ${d[1]+start_year})`)
 	// 	.attr("font-size", "8px")
 	// 	.attr("fill", "#333")
 	// 	.attr("text-anchor", "start");

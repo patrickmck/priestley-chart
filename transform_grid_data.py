@@ -1,5 +1,6 @@
 import json
 import numpy as np
+import random
 
 with open('grid_data.json', 'r') as f:
     graphdata = json.load(f)
@@ -35,68 +36,71 @@ row_names = {
 num_rows = len(row_names)
 num_columns = end_year - start_year
 print(num_rows)
-M = np.empty((num_rows, num_columns), dtype=object)
+
+polygon_data = {}
 
 try:
     for context in graphdata.get('contexts'):
+        polygon_data[context] = []
         for timeline in graphdata['contexts'][context]:
-            
+            obj_name = timeline[0]
+            row_number = row_names.get(obj_name)
             obj_start = timeline[1]
+            col_start = max(obj_start-start_year, 0)
             obj_end = timeline[2]
             if obj_end is None:
                 obj_end = end_year
-            col_start = max(obj_start-start_year, 0)
             col_end = min(num_columns-1, obj_end-start_year)
-            
-            obj_name = timeline[0]
-            row_number = row_names.get(obj_name)
+
             if row_number is not None:
-                M[row_number, col_start:col_end] = context
+                polygon_data[context].append([row_number, col_start, col_end])
             else:
                 obj_rows = expand_node(obj_name)
-                # print(f"{obj_name}: {obj_rows}")
                 for obj_row in obj_rows:
                     row_number = row_names.get(obj_row)
-                    M[row_number, col_start:col_end] = context
+                    polygon_data[context].append([row_number, col_start, col_end])
+        polygon_data[context].sort()
 except Exception as e:
     print(f"Exception: {e}")
 
-context_array = M.tolist()
-border_array = []
 
-for i, row in enumerate(context_array):
-    border_row = []
-    # if i > 20:
-    #     break
-    for j, cell in enumerate(row):
-        # if j < 20:
-        #     pass
-        # if j > 60:
-        #     break
-        # print(f"({i},{j}) {cell}")
-        t_border, r_border, b_border, l_border = False, False, False, False
-        if i>0:
-            t_match = (context_array[i][j] == context_array[i-1][j])
-        if j<num_columns-1:
-            r_match = (context_array[i][j] == context_array[i][j+1])
-        if i<num_rows-1:
-            b_match = (context_array[i][j] == context_array[i+1][j])
-        if j>0:
-            l_match = (context_array[i][j] == context_array[i][j-1])
+def rows_to_points(context_subset):
+    # Each row looks like [row_num, col_start, col_end]. This method
+    # takes a list of such lists and returns a list of [x,y] coords.
+    point_list = []
+    for k,row in enumerate(context_subset):
+        if k==0:
+            # First row gets a top line
+            point_list.append((row[0],row[1])[::-1])
+            point_list.append((row[0],row[2])[::-1])
+        if k==len(context_subset)-1:
+            # Last row gets a bottom line
+            point_list.append((row[0]+1,row[1])[::-1])
+            point_list.append((row[0]+1,row[2])[::-1])
+        if k!=0 and row[1] != context_subset[k-1][1]:
+            point_list.append((row[0], row[1])[::-1])
+            point_list.append((row[0], context_subset[k-1][1])[::-1])
+        if k!=0 and row[2] != context_subset[k-1][2]:
+            point_list.append((row[0], row[2])[::-1])
+            point_list.append((row[0], context_subset[k-1][2])[::-1])
+    return point_list
 
-        if i==0 or not t_match:
-            t_border = True
-        if j==0 or not l_match:
-            l_border = True
-        if j==num_columns or not r_match:
-            r_border = True
-        if i==num_rows or not b_match:
-            b_border = True
-
-        border_row.append([t_border, r_border, b_border, l_border])
-    border_array.append(border_row)
-
-import random
+polygon_points = []
+for context in polygon_data.keys():
+    break_idx = 0
+    for i in range(len(polygon_data[context])):
+        if i==len(polygon_data[context])-1:
+            context_subset = polygon_data[context][break_idx:i+1]
+            point_list = rows_to_points(context_subset)
+            polygon_points.append({'name': context, 'points': point_list})
+        elif polygon_data[context][i+1][0] != polygon_data[context][i][0]+1:
+            context_subset = polygon_data[context][break_idx:i+1]
+            point_list = rows_to_points(context_subset)
+            polygon_points.append({'name': context, 'points': point_list})
+            # polygon_points.append({'name': context, 'points': polygon_data[context][break_idx:i+1]})
+            break_idx = i+1
+        print(f"{context}\t{polygon_data[context][i]}")
+print(polygon_points)
 
 def random_hex_color():
     return "#{:02x}{:02x}{:02x}".format(random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
@@ -107,27 +111,16 @@ colour_map = {
 }
 colour_map.update({None: '#f1e2b3'})
 
-with open('www/public/grid_points.json', 'r') as f:
-    gridpoint_data = json.load(f)
-
-gridpoints = []
-for g in gridpoint_data:
-    gridpoints.extend(g['points'])
-print(gridpoints)
 
 output_dict = {
     'num_rows': num_rows,
     'num_cols': num_columns,
-    'data': context_array,
-    'borders': border_array,
+    'start_year': start_year,
+    'end_year': end_year,
     'colours': colour_map,
-    'row_names': row_names,
     'row_numbers': {k: r for k,r in enumerate(graphdata['rows'])},
-    'gridpoints': gridpoints,
-    'polydata': gridpoint_data
+    'polydata': polygon_points
 }
 
-np.savetxt('grid_contents.csv', M, delimiter=',', fmt='%s')
 with open('./www/public/grid_contents.json', 'w') as f:
     json.dump(output_dict, f)
-# print(M)
