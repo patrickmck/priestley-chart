@@ -81,7 +81,7 @@
             ["Utah", 1776, 1821],
             ["Arizona", 1692, 1821],
             ["New Mexico", 1598, 1821],
-            ["Texas", 1519, 1836],
+            ["Texas", 1519, 1821],
             ["Florida", 1513, 1819],
             ["Nueva Vizcaya", 1562, 1821],
             ["Nuevo Leon", 1596, 1821],
@@ -104,7 +104,7 @@
         ],
         "Mexico": [
             ["Mexican Cession", 1821, 1848],
-            ["Texas", 1821, 1845],
+            ["Texas", 1821, 1836],
             ["Modern Mexico", 1821, null],
             ["Guatemala", 1821, 1823],
             ["El Salvador", 1821, 1823],
@@ -257,6 +257,14 @@
         "Mamluk Sultanate": [
             ["Egypt", 1250, 1517],
             ["Levant", 1291, 1517]
+        ],
+        "Timurid Empire": [
+            ["Northern Persia", 1294, 1501],
+            ["Southern Persia", 1294, 1504],
+            ["Mesopotamia", 1294, 1508],
+            ["Khwarazm", 1294, 1500],
+            ["Transoxia", 1294, 1500],
+            ["Khorasan", 1294, 1510]
         ]
     }
 }

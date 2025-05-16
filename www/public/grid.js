@@ -1,7 +1,7 @@
 // import * as d3 from 'd3'
 const row_width = 2
 const row_height = 20
-
+const bottom_margin = 100
 const opacity_low = 0.5
 const opacity_high = 0.9
 
@@ -58,11 +58,20 @@ fetch('./grid_contents.json')
 	console.log("Width: " + grid_width);
 	console.log("Height: " + grid_height);
 
+	// Function to generate tooltip html content, given a node selection
+	let make_node_tooltip_content = function(node, event) {
+		let this_year = start_year+Math.round(event.pageX/row_width);
+		let this_row = Math.floor(event.pageY/row_height);
+		let output_html = `<b>${node.__data__.name}</b><br/>\
+		(${this_year}, ${row_numbers[this_row]})`
+		return output_html
+	}
+
 
 	var grid = d3.select("#grid")
 		.append("svg")
-		.attr("width",grid_width + "px")
-		.attr("height",grid_height + "px");
+		.attr("width",grid_width+"px")
+		.attr("height",grid_height+bottom_margin+"px");
 
 	let tooltip = d3.select("body")
 		.append('div')
@@ -84,8 +93,8 @@ fetch('./grid_contents.json')
 	}
 	let mousemove = function(event, d) {
 		tooltip
-			.html(make_node_tooltip_content(this, event))
-			.style('transform', `translate(${event.pageX+10}px, ${event.pageY-grid_height+5}px)`)
+			.html(make_node_tooltip_content(this, event, start_year))
+			.style('transform', `translate(${event.pageX+10}px, ${event.pageY-grid_height-bottom_margin+5}px)`)
 	}
 	let mouseleave = function(d) {
 		tooltip
@@ -93,15 +102,6 @@ fetch('./grid_contents.json')
 		d3.select(this)
     		.attr("stroke-width", 1)
 			.attr("opacity", opacity_low)
-	}
-
-	// Function to generate tooltip html content, given a node selection
-	let make_node_tooltip_content = (node, event) => {
-		let this_year = start_year+Math.round(event.pageX/row_width);
-		let this_row = Math.floor(event.pageY/row_height);
-		let output_html = `<b>${node.__data__.name}</b><br/>\
-		(${this_year}, ${row_numbers[this_row]})`
-		return output_html
 	}
 	
 
