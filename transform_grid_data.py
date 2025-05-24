@@ -1,5 +1,5 @@
 import json
-import numpy as np
+# import numpy as np
 import random
 
 with open('grid_data.json', 'r') as f:
@@ -25,7 +25,7 @@ def check_tree():
     return True
 
 
-start_year = 1200
+start_year = 850
 end_year = 1940
 
 row_names = {

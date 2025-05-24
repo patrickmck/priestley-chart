@@ -16,13 +16,15 @@
     .app-container {
         margin-left: 0px;
         margin-top: 0px;
-        margin-right: 50px;
+        margin-right: 0px;
         padding: 0px;
+        width: max-content;
     }
     .svg-container {
         text-align: center;
         padding: 5px;
         background-color: #FCF8F0;
+        width: max-content;
     }
     body {
       font-family: sans-serif;
@@ -38,12 +40,20 @@
       /* visibility: hidden; */
       /* z-index: 10; */
     }
+    .timeline {
+      position: fixed;
+      top: 0;
+      left: 0;
+      padding: 5px;
+      width: max-content;
+    }
   </style>
 
 </head>
 
 <body class='app-container'>
 
+  <div id='fixed-timeline' class='timeline'></div>
   <div id='grid' class='svg-container'></div>
   <!-- <div id='hovertext' class='tooltip'></div> -->
   <script src='grid.js'></script>

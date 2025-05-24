@@ -1,6 +1,7 @@
 // import * as d3 from 'd3'
 const row_width = 2
 const row_height = 20
+const top_margin = 50
 const bottom_margin = 100
 const opacity_low = 0.5
 const opacity_high = 0.9
@@ -16,11 +17,22 @@ fetch('./grid_contents.json')
 	var num_cols = chart_data.num_cols;
 	var start_year = chart_data.start_year;
 	var end_year = chart_data.end_year;
+
+	var start_century = Math.floor(start_year/100)*100
+	var timeline_centuries = []
+	var timeline_decades = []
+	for (let y=start_century; y < end_year; y += 100) {
+		timeline_centuries.push(y);
+		for (let d=y; d < y+100; d += 10) {
+			timeline_decades.push(d)
+		}
+	}
 	var colourmap = chart_data.colours;
 	// var row_names = chart_data.row_names;
 	var row_numbers = chart_data.row_numbers;
 	// var gridpoints = chart_data.gridpoints;
 	var polydata = chart_data.polydata;
+	console.log(polydata)
 	console.log(colourmap)
 
 	function sortAxisAlignedPolygon(points) {
@@ -55,23 +67,37 @@ fetch('./grid_contents.json')
 
 	var grid_width = row_width*num_cols;
 	var grid_height = row_height*num_rows;
+	var total_height = row_height*num_rows+top_margin+bottom_margin;
 	console.log("Width: " + grid_width);
 	console.log("Height: " + grid_height);
 
 	// Function to generate tooltip html content, given a node selection
 	let make_node_tooltip_content = function(node, event) {
-		let this_year = start_year+Math.round(event.pageX/row_width);
-		let this_row = Math.floor(event.pageY/row_height);
+		// console.log(event)
+		// let this_year = start_year+Math.round(event.pageX/row_width);
+		let this_year = start_year+Math.round(event.offsetX/row_width);
+		let this_row = Math.floor(event.offsetY/row_height);
 		let output_html = `<b>${node.__data__.name}</b><br/>\
 		(${this_year}, ${row_numbers[this_row]})`
 		return output_html
 	}
 
 
+	var timeline_ypos = 25
+	var timeline = d3.select("#fixed-timeline")
+		.append('svg')
+		// .attr('class', 'timeline')
+		.attr("width",grid_width+"px")
+		.attr("height",timeline_ypos+5+"px");
+	
+	window.addEventListener('scroll', () =>
+		d3.select("#fixed-timeline").style("left", -window.scrollX + "px")
+	);
+
 	var grid = d3.select("#grid")
 		.append("svg")
 		.attr("width",grid_width+"px")
-		.attr("height",grid_height+bottom_margin+"px");
+		.attr("height",grid_height+top_margin+bottom_margin+"px");
 
 	let tooltip = d3.select("body")
 		.append('div')
@@ -94,7 +120,8 @@ fetch('./grid_contents.json')
 	let mousemove = function(event, d) {
 		tooltip
 			.html(make_node_tooltip_content(this, event, start_year))
-			.style('transform', `translate(${event.pageX+10}px, ${event.pageY-grid_height-bottom_margin+5}px)`)
+			.style('transform', `translate(${event.pageX+10}px, ${event.pageY-total_height+5}px)`)
+			// .style('transform', `translate(${event.clientX+10}px, ${event.clientY+10}px)`)
 	}
 	let mouseleave = function(d) {
 		tooltip
@@ -111,7 +138,9 @@ fetch('./grid_contents.json')
 		.attr("class", ".poly")
 		.attr("points", function(d) {
 			const sorted = sortAxisAlignedPolygon(d.points);
-			return sorted.map(p => [p[0]*row_width, p[1]*row_height].join(",")).join(" ");})
+			// console.log(d.name)
+			// console.log(sorted.map(p => [p[0]*row_width, p[1]*row_height]))
+			return sorted.map(p => [p[0]*row_width, top_margin+p[1]*row_height].join(",")).join(" ");})
 		.style("fill", function(d) { return colourmap[d.name]; })
 		.attr("stroke", "black")
     	.attr("opacity", opacity_low)
@@ -120,27 +149,55 @@ fetch('./grid_contents.json')
 		.on("mousemove", mousemove)
 		.on("mouseleave", mouseleave);
 
-	// var point = grid.selectAll(".point")
-	// 	.data(gridpoints)
-	// 	.enter().append("circle")
-	// 	.attr("class","point")
-	// 	.attr("cx", d => 1+d[0]*row_width)
-	// 	.attr("cy", d => 1+d[1]*row_height)
-	// 	.attr("r", 2.5)
-	// 	.style("fill", "black")
 
-	// var pointlabel = grid.selectAll(".pointlabel")
-	// 	.data(gridpoints)
-	// 	.enter().append("text")
-	// 	.attr("class", "pointlabel")
-	// 	.attr("x", d => 1+d[0]*row_width)
-	// 	.attr("y", d => 1+d[1]*row_height)
-	// 	.attr("dx", 1) // horizontal offset
-	// 	.attr("dy", -1) // vertical offset (move up)
-	// 	.text(d => `(${d[0]}, ${d[1]+start_year})`)
-	// 	.attr("font-size", "8px")
-	// 	.attr("fill", "#333")
-	// 	.attr("text-anchor", "start");
+	var yearlabel = timeline.selectAll(".yearlabel")
+		.data(timeline_centuries)
+		.enter().append("text")
+		.attr("class", "yearlabel")
+		.attr("position", "fixed")
+		.attr("x", d => (d-start_year)*row_width)
+		.attr("y", timeline_ypos)
+		.attr("dx", -14) // horizontal offset
+		.attr("dy", -10) // vertical offset (move up)
+		.text(d => `${d}`)
+		.attr("font-size", "14px")
+		.attr("font-weight", "bold")
+		.attr("fill", "#333")
+		.attr("text-anchor", "start");
+
+	var yearpoint = timeline.selectAll(".yearpoint")
+		.data(timeline_centuries)
+		.enter().append("circle")
+		.attr("class","yearpoint")
+		.attr("cx", d => (d-start_year)*row_width)
+		.attr("cy", timeline_ypos)
+		.attr("r", 3)
+		.style("fill", "black")
+	
+	var yeartick = timeline.selectAll(".yeartick")
+		.data(timeline_decades)
+		.enter().append("line")
+		.attr("class","yeartick")
+		.style('stroke', 'grey')
+		.style('stroke-width', `1px`)
+		.attr("pointer-events", "none")
+		.attr("x1", d => (d-start_year)*row_width)
+		.attr("x2", d => (d-start_year)*row_width)
+		.attr("y1", timeline_ypos-5)
+		.attr("y2", timeline_ypos+5)
+
+	var yearline = grid.selectAll(".yearline")
+		.data(timeline_centuries)
+		.enter().append("line")
+		.attr("class","yearline")
+		.style('stroke', 'grey')
+		.style('stroke-width', `1px`)
+		.style("stroke-dasharray", "3 10")
+		.attr("pointer-events", "none")
+		.attr("x1", d => (d-start_year)*row_width)
+		.attr("x2", d => (d-start_year)*row_width)
+		.attr("y1", timeline_ypos)
+		.attr("y2", total_height)
 
 	})
 	.catch(error => {
