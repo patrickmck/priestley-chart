@@ -75,11 +75,12 @@ fetch('./grid_contents.json')
 	let make_node_tooltip_content = function(node, event) {
 		// console.log(event)
 		// let this_year = start_year+Math.round(event.pageX/row_width);
+		let this_name = node.__data__.name
 		let this_year = start_year+Math.round(event.offsetX/row_width);
 		let this_row = Math.floor(event.offsetY/row_height);
-		let output_html = `<b>${node.__data__.name}</b><br/>\
-		(${this_year}, ${row_numbers[this_row]})`
-		return output_html
+		let context_line = `(${this_year}, ${row_numbers[this_row]})`;
+		let total_width = Math.max(Array.from(this_name).length, Array.from(context_line).length);
+		return {'content': `<b>${this_name}</b><br/>${context_line}`, 'width': total_width}
 	}
 
 
@@ -111,22 +112,24 @@ fetch('./grid_contents.json')
 	let mouseover = function(d) {
 		tooltip
 			.style("opacity", 1)
-		d3.select(this)
+		d3.selectAll("polygon")
+        	.filter(p => p.name == this.__data__.name)
     		.attr("stroke-width", 1.5)
 			.attr("opacity", opacity_high)
-		// d3.selectAll('.poly')
-		// .filter(d => d.id.includes(this.getAttribute('name')))
 	}
 	let mousemove = function(event, d) {
+		let fromRight = window.innerWidth - event.clientX;
+		let tooltip_body = make_node_tooltip_content(this, event, start_year);
+		let xpos = fromRight <= 200 ? event.pageX - tooltip_body.width*8 : event.pageX+10;
 		tooltip
-			.html(make_node_tooltip_content(this, event, start_year))
-			.style('transform', `translate(${event.pageX+10}px, ${event.pageY-total_height+5}px)`)
-			// .style('transform', `translate(${event.clientX+10}px, ${event.clientY+10}px)`)
+			.html(tooltip_body.content)
+			.style('transform', `translate(${xpos}px, ${event.pageY-total_height+5}px)`)
 	}
 	let mouseleave = function(d) {
 		tooltip
 			.style("opacity", 0)
-		d3.select(this)
+		d3.selectAll("polygon")
+        	.filter(p => p.name == this.__data__.name)
     		.attr("stroke-width", 1)
 			.attr("opacity", opacity_low)
 	}
@@ -138,8 +141,6 @@ fetch('./grid_contents.json')
 		.attr("class", ".poly")
 		.attr("points", function(d) {
 			const sorted = sortAxisAlignedPolygon(d.points);
-			// console.log(d.name)
-			// console.log(sorted.map(p => [p[0]*row_width, p[1]*row_height]))
 			return sorted.map(p => [p[0]*row_width, top_margin+p[1]*row_height].join(",")).join(" ");})
 		.style("fill", function(d) { return colourmap[d.name]; })
 		.attr("stroke", "black")
