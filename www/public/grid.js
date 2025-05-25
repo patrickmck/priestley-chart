@@ -32,25 +32,28 @@ fetch('./grid_contents.json')
 	var row_numbers = chart_data.row_numbers;
 	// var gridpoints = chart_data.gridpoints;
 	var polydata = chart_data.polydata;
-	console.log(polydata)
-	console.log(colourmap)
+	// console.log(polydata)
+	// console.log(colourmap)
 
-	function sortAxisAlignedPolygon(points) {
-		const path = [points[0]]
-		const remaining = points.slice(1)
+	function sortAxisAlignedPolygon(points, name) {
+		let path = [points[0]]
+		let remaining = points.slice(1)
+		
 		let useX = true
 		while (path.length < points.length) {
-			const current_point = path[path.length-1]
-			const candidates = remaining.filter(p => useX ? p[0]==current_point[0] : p[1]==current_point[1])
+			let current_point = path[path.length-1]
+			// Choose next point from among those that share the same x or y coordinate to current point
+			let candidates = remaining.filter(p => useX ? p[0]==current_point[0] : p[1]==current_point[1])
 			if (candidates.length == 0) {
+				console.log('Name:', name, 'Path:', path, 'Use X:', useX, 'Remaining:', remaining)
 				throw new Error(`No remaining point shares ${useX ? 'x' : 'y'} with current point.`);
 			}
-			
-			 // Pick the one with minimal distance along the varying axis
+
+			// Pick the one with minimal distance along the varying axis
 			let next_point = candidates.reduce((closest, p) => {
-				const [x0,y0] = current_point;
-				const closestDist = useX ? Math.abs(closest[0] - x0) : Math.abs(closest[1] - y0);
-				const currentDist = useX ? Math.abs(p[0] - x0) : Math.abs(p[1] - y0);
+				let [x0,y0] = current_point;
+				let closestDist = useX ? Math.abs(closest[0] - x0) : Math.abs(closest[1] - y0);
+				let currentDist = useX ? Math.abs(p[0] - x0) : Math.abs(p[1] - y0);
 				return currentDist < closestDist ? p : closest;
 			});
 			path.push(next_point);
@@ -61,7 +64,10 @@ fetch('./grid_contents.json')
 
 			useX = !useX;
 		}
-		// console.log(path)
+		if (name == "debug") {
+			console.log('Points', points.map(p => [p[0]+start_year, p[1]]))
+			console.log('Path', path.map(p => [p[0]+start_year, p[1]]))
+		}
 		return path;
 	}
 
@@ -71,6 +77,17 @@ fetch('./grid_contents.json')
 	console.log("Width: " + grid_width);
 	console.log("Height: " + grid_height);
 
+	let get_text_width = function(text) {
+		let tmp_svg = d3.select('body').append('svg');
+		let tmp_text = tmp_svg.append('text')
+			.attr('font-size', '12px')
+			.text(text);
+
+		let tmp_text_width = tmp_text.node().getBBox().width;
+		tmp_svg.remove();
+		return tmp_text_width
+	}
+
 	// Function to generate tooltip html content, given a node selection
 	let make_node_tooltip_content = function(node, event) {
 		// console.log(event)
@@ -79,8 +96,8 @@ fetch('./grid_contents.json')
 		let this_year = start_year+Math.round(event.offsetX/row_width);
 		let this_row = Math.floor(event.offsetY/row_height);
 		let context_line = `(${this_year}, ${row_numbers[this_row]})`;
-		let total_width = Math.max(Array.from(this_name).length, Array.from(context_line).length);
-		return {'content': `<b>${this_name}</b><br/>${context_line}`, 'width': total_width}
+		let tooltip_width = Math.max(get_text_width(this_name), get_text_width(context_line));
+		return {'content': `<b>${this_name}</b><br/>${context_line}`, 'width': tooltip_width}
 	}
 
 
@@ -120,7 +137,8 @@ fetch('./grid_contents.json')
 	let mousemove = function(event, d) {
 		let fromRight = window.innerWidth - event.clientX;
 		let tooltip_body = make_node_tooltip_content(this, event, start_year);
-		let xpos = fromRight <= 200 ? event.pageX - tooltip_body.width*8 : event.pageX+10;
+		// If within 200px of the right edge, shift tooltip to other side of cursor
+		let xpos = fromRight <= 200 ? event.pageX-tooltip_body.width-20 : event.pageX+10;
 		tooltip
 			.html(tooltip_body.content)
 			.style('transform', `translate(${xpos}px, ${event.pageY-total_height+5}px)`)
@@ -140,7 +158,7 @@ fetch('./grid_contents.json')
 		.enter().append("polygon")
 		.attr("class", ".poly")
 		.attr("points", function(d) {
-			const sorted = sortAxisAlignedPolygon(d.points);
+			let sorted = sortAxisAlignedPolygon(d.points, d.name);
 			return sorted.map(p => [p[0]*row_width, top_margin+p[1]*row_height].join(",")).join(" ");})
 		.style("fill", function(d) { return colourmap[d.name]; })
 		.attr("stroke", "black")
@@ -202,5 +220,5 @@ fetch('./grid_contents.json')
 
 	})
 	.catch(error => {
-		console.error('Error loading the JSON file:', error);
+		console.error('Error:', error);
 	});

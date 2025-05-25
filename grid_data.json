@@ -50,8 +50,7 @@
             ["Ruptert's Land", 1870, null],
             ["Northwest Territory", 1870, null],
             ["Vancouver", 1871, null],
-            ["British Columbia", 1871, null],
-            ["Newfoundland", 1907, null]
+            ["British Columbia", 1871, null]
         ],
         "USA": [
             ["Thirteen Colonies", 1776, null],
@@ -94,7 +93,6 @@
             ["Cuba", 1492, 1898]
         ],
         "New France": [
-            ["New Brunswick", 1605, 1763],
             ["Nova Scotia", 1605, 1621],
             ["Nova Scotia", 1667, 1710],
             ["New Brunswick", 1604, 1763],
@@ -181,9 +179,7 @@
         "Polish-Lithuanian Commonwealth": [
             ["Kingdom of Poland", 1569, 1795],
             ["Lithuania", 1569, 1795],
-            ["Ruthenia", 1569, 1649],
-            ["Smolensk", 1611, 1656],
-            ["Royal Prussia", 1569, 1772]
+            ["Smolensk", 1611, 1656]
         ],
         "Kingdom of Galicia-Volhynia": [
             ["Ukraine", 1199, 1246]
