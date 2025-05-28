@@ -17,6 +17,21 @@
         "Persia": ["Northern Persia", "Southern Persia"]
     },
     "contexts": {
+        "Eastern Roman Empire": [
+            ["Northern Anatolia", 330, 1389],
+            ["Western Anatolia", 330, 1361],
+            ["Constantinople", 330, 1453],
+            ["Greece", 330, 1453],
+            ["Albania", 330, 1453],
+            ["Croatia", 330, 1453],
+            ["Royal Hungary", 330, 1000],
+            ["Greater Hungary", 330, 1000],
+            ["Transylvania", 330, 1000],
+            ["Bulgaria", 330, 1453],
+            ["Moldavia", 330, 1453],
+            ["Levant", 330, 1453],
+            ["Egypt", 330, 1453]
+        ],
         "British America": [
             ["Virginia", 1607, 1776],
             ["Massachusetts", 1620, 1776],
@@ -215,8 +230,8 @@
             ["Ruthenia", 1772, 1918]
         ],
         "Ottoman Empire": [
-            ["Northern Anatolia", 1299, 1918],
-            ["Western Anatolia", 1302, 1918],
+            ["Northern Anatolia", 1389, 1918],
+            ["Western Anatolia", 1361, 1918],
             ["Bulgaria", 1395, 1918],
             ["Constantinople", 1453, 1918],
             ["Southern Anatolia", 1481, 1918],

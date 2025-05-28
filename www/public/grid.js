@@ -1,5 +1,5 @@
 // import * as d3 from 'd3'
-const row_width = 2
+const row_width = 1.5
 const row_height = 20
 const top_margin = 50
 const bottom_margin = 100
@@ -94,7 +94,7 @@ fetch('./grid_contents.json')
 		// let this_year = start_year+Math.round(event.pageX/row_width);
 		let this_name = node.__data__.name
 		let this_year = start_year+Math.round(event.offsetX/row_width);
-		let this_row = Math.floor(event.offsetY/row_height);
+		let this_row = Math.floor((event.offsetY-top_margin)/row_height);
 		let context_line = `(${this_year}, ${row_numbers[this_row]})`;
 		let tooltip_width = Math.max(get_text_width(this_name), get_text_width(context_line));
 		return {'content': `<b>${this_name}</b><br/>${context_line}`, 'width': tooltip_width}
